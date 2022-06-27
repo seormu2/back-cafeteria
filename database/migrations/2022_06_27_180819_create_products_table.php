@@ -14,13 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->increments('id');
+            $table->engine = 'InnoDB';
+            $table->bigIncrements('id');
             $table->string('nameProduct', 100);
             $table->string('referency', 100);
             $table->integer('price');
             $table->integer('weight');
-            $table->string('category', 100);
             $table->integer('stock');
+            $table->bigInteger('idCategory')->unsigned();
+            $table->foreign('idCategory')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });
     }
