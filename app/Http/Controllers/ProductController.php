@@ -13,8 +13,12 @@ class ProductController extends Controller
 
     public function deleteProduct($id){
         $product = Product::find($id);
-        $product->delete();
-        return $product;
+        $result = $product->delete();
+        if($result){
+            return Response::responseSuccess($product,200);
+        }else{
+            return Response::responseError('Ha ocurrido un error al eliminar el producto',500);
+        }
     }
 
     public function createProduct(Request $resquest){
@@ -45,6 +49,17 @@ class ProductController extends Controller
         ]);
         if($result){
             return Response::responseSuccess('producto ' . $resquest->input('nameProduct') . ' actualizado correctamente',200);
+        }else{
+            return Response::responseError('Ha ocurrido un error al actualizar el producto',500);
+        }
+    }
+
+    public function updateStock(Request $resquest,$id){
+        $result = Product::where('id', $id)->update([
+            'stock' => $resquest->input('stock'),
+        ]);
+        if($result){
+            return Response::responseSuccess('actualizado correctamente',200);
         }else{
             return Response::responseError('Ha ocurrido un error al actualizar el producto',500);
         }
